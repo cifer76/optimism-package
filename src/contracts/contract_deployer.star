@@ -170,6 +170,8 @@ def _build_chain_intent(
                 "fundDevAccounts": (
                     True if chain.network_params.fund_dev_accounts else False
                 ),
+                "proofMaturityDelaySeconds": 60,
+                "disputeGameFinalityDelaySeconds": 30,
             },
             "baseFeeVaultRecipient": read_chain_cmd("baseFeeVaultRecipient", chain_id),
             "l1FeeVaultRecipient": read_chain_cmd("l1FeeVaultRecipient", chain_id),
