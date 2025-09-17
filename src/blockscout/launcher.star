@@ -184,7 +184,7 @@ def get_config_frontend(
     blockscout_service,
 ):
     return ServiceConfig(
-        image=blockscout_params.frontend_image,
+        image=blockscout_params.image,
         ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
         public_ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
         env_vars={
