@@ -192,7 +192,7 @@ def get_config_frontend(
             "NEXT_PUBLIC_API_PROTOCOL": "http",
             "NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL": "wss",
             "NEXT_PUBLIC_NETWORK_NAME": network_params.name,
-            "NEXT_PUBLIC_NETWORK_ID": network_params.network_id,
+            "NEXT_PUBLIC_NETWORK_ID": "20250827",
             "NEXT_PUBLIC_NETWORK_CURRENCY_NAME": "MHA",
             "NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL": "MHA",
             "NEXT_PUBLIC_NETWORK_RPC_URL": el_client_rpc_url,
