@@ -5,6 +5,7 @@ _registry = import_module("/src/package_io/registry.star")
 _DEFAULT_ARGS = {
     "enabled": False,
     "image": None,
+    "frontend_image": None,
     "verifier_image": None,
 }
 
@@ -39,6 +40,17 @@ def parse(blockscout_args, network_params, registry):
             },
             ports={
                 _net.HTTP_PORT_NAME: _net.port(number=4000),
+            },
+        ),
+        blockscout_frontend=struct(
+            image=blockscout_params["frontend_image"] or registry.get(_registry.OP_BLOCKSCOUT),
+            service_name="op-blockscout-frontend-{}-{}".format(network_id, network_name),
+            labels={
+                "op.kind": "blockscout",
+                "op.network.id": str(network_id),
+            },
+            ports={
+                _net.HTTP_PORT_NAME: _net.port(number=3000),
             },
         ),
         verifier=struct(

@@ -3,6 +3,12 @@ _postgres = import_module("github.com/kurtosis-tech/postgres-package/main.star")
 _net = import_module("/src/util/net.star")
 _util = import_module("/src/util.star")
 
+SERVICE_NAME_BLOCKSCOUT = "blockscout"
+SERVICE_NAME_FRONTEND = "blockscout-frontend"
+HTTP_PORT_NUMBER = 4000
+HTTP_PORT_NUMBER_VERIF = 8050
+HTTP_PORT_NUMBER_FRONTEND = 3000
+
 BLOCKSCOUT_MIN_CPU = 100
 BLOCKSCOUT_MAX_CPU = 1000
 BLOCKSCOUT_MIN_MEMORY = 1024
@@ -69,6 +75,15 @@ def launch(
     blockscout_url = "http://{}:{}".format(
         blockscout_service.hostname, blockscout_service.ports["http"].number
     )
+
+    config_frontend = get_config_frontend(
+        plan,
+        l2_rpc_url,
+        blockscout_params=params.blockscout_frontend,
+        network_params,
+        blockscout_service,
+    )
+    plan.add_service(SERVICE_NAME_FRONTEND, config_frontend)
 
     return blockscout_url
 
@@ -154,6 +169,47 @@ def get_config_backend(
             "SECRET_KEY_BASE": "56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN",
         }
         | optimism_env_vars,
+        min_cpu=BLOCKSCOUT_MIN_CPU,
+        max_cpu=BLOCKSCOUT_MAX_CPU,
+        min_memory=BLOCKSCOUT_MIN_MEMORY,
+        max_memory=BLOCKSCOUT_MAX_MEMORY,
+    )
+
+
+def get_config_frontend(
+    plan,
+    el_client_rpc_url,
+    blockscout_params,
+    network_params,
+    blockscout_service,
+):
+    return ServiceConfig(
+        image=blockscout_params.frontend_image,
+        ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
+        public_ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
+        env_vars={
+            "HOSTNAME": "0.0.0.0",
+            "NEXT_PUBLIC_API_PROTOCOL": "http",
+            "NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL": "wss",
+            "NEXT_PUBLIC_NETWORK_NAME": network_params.name,
+            "NEXT_PUBLIC_NETWORK_ID": network_params.network_id,
+            "NEXT_PUBLIC_NETWORK_CURRENCY_NAME": "MHA",
+            "NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL": "MHA",
+            "NEXT_PUBLIC_NETWORK_RPC_URL": el_client_rpc_url,
+            "NEXT_PUBLIC_API_HOST": "l2-explorer.testnet.magicalhash.com:443",
+            "NEXT_PUBLIC_AD_BANNER_PROVIDER": "none",
+            "NEXT_PUBLIC_AD_TEXT_PROVIDER": "none",
+            "NEXT_PUBLIC_IS_TESTNET": "true",
+            "NEXT_PUBLIC_GAS_TRACKER_ENABLED": "true",
+            "NEXT_PUBLIC_HAS_BEACON_CHAIN": "true",
+            "NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE": "validation",
+            "NEXT_PUBLIC_NETWORK_ICON": "https://ethpandaops.io/logo.png",
+            "NEXT_PUBLIC_APP_PROTOCOL": "https",
+            "NEXT_PUBLIC_APP_HOST": "l2-explorer.testnet.magicalhash.com",
+            "NEXT_PUBLIC_APP_PORT": "443",
+            "NEXT_PUBLIC_USE_NEXT_JS_PROXY": "true",
+            "PORT": str(HTTP_PORT_NUMBER_FRONTEND),
+        },
         min_cpu=BLOCKSCOUT_MIN_CPU,
         max_cpu=BLOCKSCOUT_MAX_CPU,
         min_memory=BLOCKSCOUT_MIN_MEMORY,
