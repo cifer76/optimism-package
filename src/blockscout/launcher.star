@@ -185,8 +185,8 @@ def get_config_frontend(
 ):
     return ServiceConfig(
         image=blockscout_params.image,
-        ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
-        public_ports=_net.ports_to_port_specs(blockscout_params.frontend_ports),
+        ports=_net.ports_to_port_specs(blockscout_params.ports),
+        public_ports=_net.ports_to_port_specs(blockscout_params.ports),
         env_vars={
             "HOSTNAME": "0.0.0.0",
             "NEXT_PUBLIC_API_PROTOCOL": "http",
