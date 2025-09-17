@@ -78,10 +78,10 @@ def launch(
 
     config_frontend = get_config_frontend(
         plan,
-        l2_rpc_url,
+        el_client_rpc_url=l2_rpc_url,
         blockscout_params=params.blockscout_frontend,
-        network_params,
-        blockscout_service,
+        network_params=network_params,
+        blockscout_service=blockscout_service,
     )
     plan.add_service(SERVICE_NAME_FRONTEND, config_frontend)
 
