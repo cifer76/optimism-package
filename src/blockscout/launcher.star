@@ -208,6 +208,7 @@ def get_config_frontend(
             "NEXT_PUBLIC_APP_HOST": "l2-explorer.testnet.magicalhash.com",
             "NEXT_PUBLIC_APP_PORT": "443",
             "NEXT_PUBLIC_USE_NEXT_JS_PROXY": "true",
+            "NEXT_PUBLIC_COLOR_THEME_DEFAULT": "dark",
             "PORT": str(HTTP_PORT_NUMBER_FRONTEND),
         },
         min_cpu=BLOCKSCOUT_MIN_CPU,
